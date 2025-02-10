@@ -14,5 +14,5 @@ COPY . .
 # Expose port 8080 (important for Cloud Run)
 EXPOSE 8080
 
-# Run Streamlit app on port 8080
-CMD ["streamlit", "run", "app.py", "--server.port=8080", "--server.address=0.0.0.0"]
+# Start the Streamlit application
+CMD ["python", "app.py"]

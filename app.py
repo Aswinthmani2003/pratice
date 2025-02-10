@@ -1,7 +1,7 @@
 import streamlit as st
+import os
 from docx import Document
 from datetime import datetime
-import os
 import platform
 import subprocess
 
@@ -16,12 +16,12 @@ def replace_placeholders(doc, placeholders):
             for run in paragraph.runs:
                 run.text = ""  # Clear all runs
             paragraph.runs[0].text = full_text  # Add the replaced text back
-    
+
     # Replace placeholders in all paragraphs
     for para in doc.paragraphs:
         for key, value in placeholders.items():
             replace_in_paragraph(para, key, value)
-    
+
     # Replace placeholders in tables
     for table in doc.tables:
         for row in table.rows:
@@ -67,7 +67,7 @@ if st.button("Generate Contract Agreement"):
         doc_path = "sample_contract.docx"
         doc = Document(doc_path)
         doc = replace_placeholders(doc, placeholders)
-        
+
         # Save as DOCX
         docx_output_path = "Generated_Contract.docx"
         doc.save(docx_output_path)
@@ -75,18 +75,23 @@ if st.button("Generate Contract Agreement"):
         # Convert to PDF
         pdf_output_path = "Generated_Contract.pdf"
         convert_docx_to_pdf(docx_output_path, pdf_output_path)
-        
+
         st.success("Contract Agreement generated successfully!")
-        
+
         col1, col2 = st.columns(2)
-        
+
         with col1:
             with open(docx_output_path, "rb") as file:
                 st.download_button("Download as Word", file, file_name="Contract_Agreement.docx")
-        
+
         with col2:
             with open(pdf_output_path, "rb") as file:
                 st.download_button("Download as PDF", file, file_name="Contract_Agreement.pdf")
-    
+
     except Exception as e:
         st.error(f"Error: {e}")
+
+# ✅ Fix: Ensure Streamlit runs on PORT 8080 for Cloud Run
+if __name__ == "__main__":
+    port = int(os.environ.get("PORT", 8080))
+    os.system(f"streamlit run app.py --server.port={port} --server.address=0.0.0.0")
