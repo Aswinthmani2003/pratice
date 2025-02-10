@@ -90,3 +90,8 @@ if st.button("Generate Contract Agreement"):
     
     except Exception as e:
         st.error(f"Error: {e}")
+
+# Ensure Streamlit runs on port 8080 for Cloud Run
+if __name__ == "__main__":
+    port = int(os.environ.get("PORT", 8080))
+    st.run(port=port)
